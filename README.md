@@ -9,7 +9,11 @@
 * 강아지를 분양하기 위해 소개하고 분양 받은 후, 가입한 회원을 토대로 분양후기를 알릴 수 있는 사이트
 * 관리자는 회원을 관리하고 분양할 강아지들의 목록을 관리자화면에 주기적으로 업데이트 하며 각 목록들은 엑셀로 뽑을 수 있도록 함
 
-![pet_01](https://user-images.githubusercontent.com/34294649/44942828-4326a900-adf5-11e8-8786-b575c18579f2.png)
+![pet_01](https://user-images.githubusercontent.com/34294649/44942913-17a4be00-adf7-11e8-985a-150d384ca150.png)
+
+![github_03_04](https://user-images.githubusercontent.com/34294649/44942918-255a4380-adf7-11e8-9b0f-0d6ddeb758e3.png)
+
+![github_06](https://user-images.githubusercontent.com/34294649/44942922-2ee3ab80-adf7-11e8-88ae-e04eaeefe95e.png)
 
 ## 개발 환경
 <pre>
