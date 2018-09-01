@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="review">
+	<sql id="search">
+		<if test="searchType!=null">
+			<if test="searchType == 't'.toString()">
+				AND 
+					INSTR(br_title,#{keyword})>0
+			</if>
+			<if test="searchType == 'c'.toString()">
+				AND 
+					INSTR(br_content,#{keyword})>0
+			</if>
+			<if test="searchType == 'w'.toString()">
+				AND 
+					INSTR(ur_id,#{keyword})>0
+			</if>
+			<if test="searchType == 'tc'.toString()">
+				AND
+					INSTR(br_title,#{keyword})>0
+				OR
+					INSTR(br_content,#{keyword})>0
+			</if>
+			<if test="searchType == 'cw'.toString()">
+				AND
+					INSTR(br_content,#{keyword})>0
+				OR
+					INSTR(ur_id,#{keyword})>0
+			</if>
+			<if test="searchType == 'tcw'.toString()">
+				AND
+					INSTR(br_title,#{keyword})>0
+				OR
+					INSTR(br_content,#{keyword})>0
+				OR
+					INSTR(ur_id,#{keyword})>0
+			</if>
+		</if>
+	</sql>
+	<insert id="create" parameterType="ReviewVo">
+	INSERT INTO 
+		REVIEW 	
+	VALUES
+		(REVIEWSEQ.NEXTVAL
+		,#{urId}
+		,#{brTitle}
+		,#{brContent}
+		,SYSDATE
+		,0
+		,null
+		,'Y'
+		)
+	</insert>
+	
+	<select id="read" resultType="ReviewVo">
+	SELECT
+		*
+	FROM 
+		REVIEW
+	WHERE 
+		br_no=#{brNo}	
+	</select>
+	
+	<update id="viewCnt" parameterType="int">
+	UPDATE 
+		REVIEW
+	SET
+		br_hits=NVL(br_hits,0)+1
+	WHERE
+		br_no=#{brNo}
+	</update>
+	
+	<update id="update" parameterType="ReviewVo">
+	UPDATE 
+		REVIEW 
+	SET 
+		br_title=#{brTitle}
+		,br_content=#{brContent}
+		,br_date=SYSDATE
+	WHERE 
+		br_no=#{brNo}
+	</update>
+	
+	<update id="delete" parameterType="int">
+	UPDATE 
+		REVIEW 
+	SET 
+		br_en='N'
+	WHERE 
+		br_no=#{brNo}
+	</update>
+	
+	<select id="listSearch" resultType="ReviewVo">
+	<![CDATA[
+	SELECT 
+	B.RNUM, B.*
+	FROM(
+    	 SELECT 
+    	 ROWNUM AS RNUM, A.*
+    	 FROM(
+         	  SELECT *
+         	  FROM REVIEW  
+         	  WHERE br_en='Y'       	 
+    ]]>
+    <include refid="search"></include>
+	<![CDATA[
+              ORDER BY br_no DESC, br_date DESC)A
+         WHERE ROWNUM <=#{page}*#{perPageNum})B
+    WHERE B.RNUM >=#{pageStart}
+	]]>	
+	</select>
+	
+	<select id="listSearchCount" resultType="int">
+	<![CDATA[
+	SELECT 
+		COUNT(br_no)
+	FROM
+		REVIEW
+	WHERE 
+		br_en='Y'  
+	]]>
+	<include refid="search"></include>
+	</select>
+	
+
+
+</mapper>
